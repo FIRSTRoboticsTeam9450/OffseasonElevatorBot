@@ -46,6 +46,7 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
 
     /**
      * sets the setpoint to the given setpoint
+     * Clamps to between range of absolute encoder (0-1)
      * @param setpoint the position you want it to go to
      */
     public void setSetpoint(double setpoint) {
