@@ -16,11 +16,8 @@ public class Elevator extends SubsystemBase {
 
     private static Elevator elevator;
 
-    private final int m1ID = Constants.OperatorConstants.kElevatorMotor1ID;
-    private final int m2ID = Constants.OperatorConstants.kElevatorMotor2ID;
-
-    private CANSparkFlex motor1 = new CANSparkFlex(m1ID, MotorType.kBrushless);
-    private CANSparkFlex motor2 = new CANSparkFlex(m2ID, MotorType.kBrushless);
+    private CANSparkFlex motor1 = new CANSparkFlex(Constants.kElevatorMotor1ID, MotorType.kBrushless);
+    private CANSparkFlex motor2 = new CANSparkFlex(Constants.kElevatorMotor2ID, MotorType.kBrushless);
     private RelativeEncoder encoder = motor1.getEncoder();
     private SparkLimitSwitch limitSwitch = motor1.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
     private PIDController PID = new PIDController(1, 0, 0.02);

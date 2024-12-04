@@ -11,6 +11,7 @@ public class AngleCommand extends Command{
     /**
      * uses absolute encoder
      * Given pos is clamped between .4 and .71
+     * NEVER go < .38, you will bang into the elevator system if it is raised
      * @param pos the pos you want it to go to 
      */
     public AngleCommand(double pos) {
