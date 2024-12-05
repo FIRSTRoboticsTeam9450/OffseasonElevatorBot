@@ -1,9 +1,12 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
@@ -31,7 +34,7 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
     private CANSparkFlex intakeMotor = new CANSparkFlex(Constants.kIntakeMotorID, MotorType.kBrushless);
     private CANSparkFlex angleMotor = new CANSparkFlex(Constants.kAngleMotorID, MotorType.kBrushless);
     private AbsoluteEncoder encoder = angleMotor.getAbsoluteEncoder();
-    private PIDController PID = new PIDController(0.0, 0.0, 0.0);
+    private PIDController PID = new PIDController(10, 0.0, 0.0);
 
     /**
      * sets Intake and Anlge motor to certain settings
@@ -46,7 +49,7 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
         try {
             laserCan.setRangingMode(LaserCan.RangingMode.LONG);
             //Needs someone who knows how this works to set this V
-            laserCan.setRegionOfInterest(new LaserCan.RegionOfInterest(0, 0, 0, 0));
+            laserCan.setRegionOfInterest(new LaserCan.RegionOfInterest(0, 0, 16, 16));
             laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
         } catch (ConfigurationFailedException e) {
             System.out.println("Error during Laser Can Configuration: " + e);
@@ -60,6 +63,10 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
 
         intakeMotor.setIdleMode(IdleMode.kBrake);
         angleMotor.setIdleMode(IdleMode.kBrake);
+
+        angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20);
+
+        PID.setSetpoint(0.65);
     }
 
     /**
@@ -79,7 +86,7 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
     public void updateLasers() {
         try {
             measurement = laserCan.getMeasurement();
-            if (measurement == null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
+            if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
                 laserDistance = medianDistance.calculate(measurement.distance_mm);
             }
         } catch (Exception e) {
@@ -97,11 +104,11 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
 
     /**
      * sets the setpoint to the given setpoint
-     * Clamps to between range of absolute encoder (0-1)
+     * Clamps to between range of absolute encoder (0.4-0.75)
      * @param setpoint the position you want it to go to
      */
     public void setSetpoint(double setpoint) {
-        setpoint = MathUtil.clamp(setpoint, 0, 1);
+        setpoint = MathUtil.clamp(setpoint, 0.4, 0.75);
         PID.setSetpoint(setpoint);
     }
 
@@ -132,10 +139,11 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-        updatePID(encoder.getPosition());
+        double encoderPos = encoder.getPosition();
+        updatePID(encoderPos);
         updateLasers();
 
-        SmartDashboard.putNumber("Angle Encoder Pos", encoder.getPosition());
+        SmartDashboard.putNumber("Angle Encoder Pos", encoderPos);
         SmartDashboard.putNumber("Angle Target Pos", PID.getSetpoint());
         SmartDashboard.putNumber("Laser Distance", laserDistance);
     }
