@@ -71,7 +71,7 @@ public class Elevator extends SubsystemBase {
      * @param position current encoder position
      */
     public void updatePID(double position) {
-        double voltage = MathUtil.clamp(PID.calculate(position), -6, 12);
+        double voltage = MathUtil.clamp(PID.calculate(position), -1, 12); // are halfed from normal for testing purposes, normal is low: -6, high: 12
         setVoltage(voltage);
     }
 

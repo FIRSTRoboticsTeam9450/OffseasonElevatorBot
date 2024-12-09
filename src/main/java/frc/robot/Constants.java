@@ -14,11 +14,15 @@ package frc.robot;
  */
 public final class Constants {
 
+  /* ----- Elevator ID's ----- */
   public static final int kElevatorMotor1ID = 26;
-    public static final int kElevatorMotor2ID = 27;
-    public static final int kAngleMotorID = 28;
-    public static final int kIntakeMotorID = 20;
-    public static final int kLaserCanID = 20000;
+  public static final int kElevatorMotor2ID = 27;
+
+  /* ----- Intake System ----- */
+  public static final int kAngleMotorID = 28;
+  public static final int kIntakeMotorID = 20;
+  public static final int kLaserCanID = 20000;
+  public static final double kSpeedUpTime = 1.0; // in seconds
 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;

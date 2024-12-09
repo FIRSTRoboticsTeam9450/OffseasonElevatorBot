@@ -1,14 +1,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.IntakeAndAngleSubsystem;
 
-public class OutputCommand extends Command {
+public class OuttakeCommand extends Command {
 
     private IntakeAndAngleSubsystem IAASubsystem = IntakeAndAngleSubsystem.getInstance();
 
     private boolean dropped;
     private boolean dontRun;
+
+    private double voltage;
+
+    public OuttakeCommand (double voltage) {
+        this.voltage = voltage;
+    }
 
     @Override
     public void initialize() {
@@ -24,21 +31,31 @@ public class OutputCommand extends Command {
     @Override
     public void execute() {
         if (IAASubsystem.getLaserDistance() < 381 && !dropped) {
-            IAASubsystem.setIntakeVoltage(-1);
+            IAASubsystem.setIntakeVoltage(-12);
         }
         if (IAASubsystem.getLaserDistance() > 381) {
             dropped = true;
         }
+        if (voltage == 0.0) {
+            IAASubsystem.setSetpoint(0.73);
+        } else if (voltage == -12.0) {
+            IAASubsystem.setSetpoint(0.485);
+        }
+        IAASubsystem.setIntakeVoltage(voltage);
     }
 
     @Override
     public boolean isFinished() {
-        return (dropped || dontRun);
+        return true;
+        // if (timer.hasElapsed(Constants.kSpeedUpTime)) {
+
+        // }
+        // return (dropped || dontRun);
     }
 
     @Override
     public void end(boolean interrupted) {
-        IAASubsystem.setIntakeVoltage(0);
+        // IAASubsystem.setIntakeVoltage(0);
     }
 
 }

@@ -34,7 +34,7 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
     private CANSparkFlex intakeMotor = new CANSparkFlex(Constants.kIntakeMotorID, MotorType.kBrushless);
     private CANSparkFlex angleMotor = new CANSparkFlex(Constants.kAngleMotorID, MotorType.kBrushless);
     private AbsoluteEncoder encoder = angleMotor.getAbsoluteEncoder();
-    private PIDController PID = new PIDController(10, 0.0, 0.0);
+    private PIDController PID = new PIDController(17, 0.0, 0.8);
 
     /**
      * sets Intake and Anlge motor to certain settings
@@ -66,7 +66,7 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
 
         angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20);
 
-        PID.setSetpoint(0.65);
+        PID.setSetpoint(0.735);
     }
 
     /**
@@ -104,11 +104,11 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
 
     /**
      * sets the setpoint to the given setpoint
-     * Clamps to between range of absolute encoder (0.4-0.75)
+     * Clamps to between range of absolute encoder (0.482-0.73)
      * @param setpoint the position you want it to go to
      */
     public void setSetpoint(double setpoint) {
-        setpoint = MathUtil.clamp(setpoint, 0.4, 0.75);
+        setpoint = MathUtil.clamp(setpoint, 0.482, 0.73);
         PID.setSetpoint(setpoint);
     }
 

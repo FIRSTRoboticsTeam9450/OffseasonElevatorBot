@@ -5,8 +5,12 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AngleCommand;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.HoldingCommand;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.SetPosition;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -30,6 +34,8 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+    public static boolean holding = false;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -52,14 +58,21 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    /* ----- NORMAL KEYBINDS ----- */
     m_driverController.a().onTrue(new SetPosition(0));
-    m_driverController.y().onTrue(new SetPosition(19));
+    m_driverController.b().onTrue(new AngleCommand(0.73));
+    m_driverController.rightTrigger().whileTrue(new IntakeCommand(12));
+    m_driverController.rightTrigger().onFalse(new IntakeCommand(0));
+    m_driverController.leftTrigger().whileTrue(new OuttakeCommand(-12));
+    m_driverController.leftTrigger().onFalse(new OuttakeCommand(0));
 
-    //m_driverController.a().onTrue(new InstantCommand(() -> elev.setVoltage(-1)));
-    //m_driverController.y().onTrue(new InstantCommand(() -> elev.setVoltage(1)));
-    //m_driverController.a().onFalse(new InstantCommand(() -> elev.setVoltage(0)));
-    //m_driverController.y().onFalse(new InstantCommand(() -> elev.setVoltage(0)));
+    m_driverController.povDown().onTrue(new HoldingCommand(!holding));
+
+
+    /* ----- DEBUG KEYBINDS ----- */
+    // m_driverController.y().onTrue(new SetPosition(19));
+    // m_driverController.x().onTrue(new AngleCommand(0.485));
+
 
   }
 
