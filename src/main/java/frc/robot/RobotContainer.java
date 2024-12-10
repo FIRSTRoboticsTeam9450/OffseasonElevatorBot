@@ -5,18 +5,13 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.AngleCommand;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HoldingCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.SetPosition;
-import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.IntakeAndAngleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -29,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private IntakeAndAngleSubsystem intakeAngleSub = IntakeAndAngleSubsystem.getInstance();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -52,27 +46,32 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
     /* ----- NORMAL KEYBINDS ----- */
+    /*
+     * A = Elevator Down
+     * Y = Elevator Up
+     * Right Trigger = Intake
+     * Left Trigger = Outtake
+     */
     m_driverController.a().onTrue(new SetPosition(0));
-    m_driverController.b().onTrue(new AngleCommand(0.73));
+    m_driverController.y().onTrue(new SetPosition(19));
     m_driverController.rightTrigger().whileTrue(new IntakeCommand(12));
     m_driverController.rightTrigger().onFalse(new IntakeCommand(0));
     m_driverController.leftTrigger().whileTrue(new OuttakeCommand(-12));
     m_driverController.leftTrigger().onFalse(new OuttakeCommand(0));
 
+    //temp keybind until we get a laserCan on the intake system :)
     m_driverController.povDown().onTrue(new HoldingCommand(!holding));
 
 
     /* ----- DEBUG KEYBINDS ----- */
-    // m_driverController.y().onTrue(new SetPosition(19));
+    /*
+     * B = Intake angled down
+     * x = Intake angled up
+     */
+    // m_driverController.b().onTrue(new AngleCommand(0.73));
     // m_driverController.x().onTrue(new AngleCommand(0.485));
-
 
   }
 

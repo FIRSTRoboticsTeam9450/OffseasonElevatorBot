@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkFlex;
@@ -45,6 +44,7 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
      */
     public IntakeAndAngleSubsystem() {
 
+        //LaserCan settings
         laserCan = new LaserCan(Constants.kLaserCanID);
         try {
             laserCan.setRangingMode(LaserCan.RangingMode.LONG);
@@ -54,8 +54,10 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
         } catch (ConfigurationFailedException e) {
             System.out.println("Error during Laser Can Configuration: " + e);
         }
+
         measurement = laserCan.getMeasurement();
 
+        //Motor Settings
         intakeMotor.restoreFactoryDefaults();
         angleMotor.restoreFactoryDefaults();
         intakeMotor.setSmartCurrentLimit(40);
@@ -66,6 +68,7 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
 
         angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20);
 
+        //Intake system starting position
         PID.setSetpoint(0.735);
     }
 
@@ -93,6 +96,28 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
             e.printStackTrace();
         }
     }
+
+    /**
+     * Update motor voltage based on the given position
+     * @param pos current encoder position
+     */
+    public void updatePID(double pos) {
+        double voltage = MathUtil.clamp(PID.calculate(pos), -2, 2);
+        setAngleVoltage(voltage);
+    }
+
+    @Override
+    public void periodic() {
+        double encoderPos = encoder.getPosition();
+        updatePID(encoderPos);
+        updateLasers();
+
+        SmartDashboard.putNumber("Angle Encoder Pos", encoderPos);
+        SmartDashboard.putNumber("Angle Target Pos", PID.getSetpoint());
+        SmartDashboard.putNumber("Laser Distance", laserDistance);
+    }
+
+    /* ----- Setters and Getters ----- */
 
     /**
      * returns the distance of the laser from the laser can
@@ -128,24 +153,5 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
         angleMotor.setVoltage(voltage);
     }
 
-    /**
-     * Update motor voltage based on the given position
-     * @param pos current encoder position
-     */
-    public void updatePID(double pos) {
-        double voltage = MathUtil.clamp(PID.calculate(pos), -2, 2);
-        setAngleVoltage(voltage);
-    }
-
-    @Override
-    public void periodic() {
-        double encoderPos = encoder.getPosition();
-        updatePID(encoderPos);
-        updateLasers();
-
-        SmartDashboard.putNumber("Angle Encoder Pos", encoderPos);
-        SmartDashboard.putNumber("Angle Target Pos", PID.getSetpoint());
-        SmartDashboard.putNumber("Laser Distance", laserDistance);
-    }
-
+    
 }

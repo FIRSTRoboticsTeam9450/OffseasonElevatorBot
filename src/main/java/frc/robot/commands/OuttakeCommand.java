@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.IntakeAndAngleSubsystem;
 
 public class OuttakeCommand extends Command {
@@ -9,7 +8,7 @@ public class OuttakeCommand extends Command {
     private IntakeAndAngleSubsystem IAASubsystem = IntakeAndAngleSubsystem.getInstance();
 
     private boolean dropped;
-    private boolean dontRun;
+    // private boolean dontRun;
 
     private double voltage;
 
@@ -22,9 +21,9 @@ public class OuttakeCommand extends Command {
         addRequirements(IAASubsystem);
         IAASubsystem.setIntakeVoltage(0);
         dropped = false;
-        dontRun = false;
+        // dontRun = false;
         if (IAASubsystem.getLaserDistance() > 381) {
-            dontRun = true;
+            // dontRun = true;
         }
     }
 
