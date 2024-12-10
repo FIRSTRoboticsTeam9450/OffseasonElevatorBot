@@ -3,6 +3,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeAndAngleSubsystem;
 
+/**
+ * Uses a brute force method atm until intake system gains a laser can
+ */
 public class IntakeCommand extends Command{
 
     private IntakeAndAngleSubsystem IAASubsystem = IntakeAndAngleSubsystem.getInstance();

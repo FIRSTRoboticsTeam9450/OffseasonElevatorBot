@@ -3,6 +3,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeAndAngleSubsystem;
 
+/**
+ * Uses a brute forced method atm untill the intake system gains a laserCan
+ * once we get a lasercan, just uncomment all "dontRun" variable stuff, as well as the stuff in isFinished and end
+ */
 public class OuttakeCommand extends Command {
 
     private IntakeAndAngleSubsystem IAASubsystem = IntakeAndAngleSubsystem.getInstance();

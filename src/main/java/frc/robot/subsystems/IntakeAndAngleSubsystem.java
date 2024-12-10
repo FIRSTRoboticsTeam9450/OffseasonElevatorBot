@@ -72,16 +72,7 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
         PID.setSetpoint(0.735);
     }
 
-    /**
-     * get the subsystem instance
-     * @return returns the instance of this subsystem
-     */
-    public static IntakeAndAngleSubsystem getInstance() {
-        if (IAASubsystem == null) {
-            IAASubsystem = new IntakeAndAngleSubsystem();
-        }
-        return IAASubsystem;
-    }
+    /* ----- Updaters ----- */
 
     /**
      * Updates the median distance of the laser can for the past 3 checks
@@ -118,6 +109,17 @@ public class IntakeAndAngleSubsystem extends SubsystemBase{
     }
 
     /* ----- Setters and Getters ----- */
+
+    /**
+     * get the subsystem instance
+     * @return returns the instance of this subsystem
+     */
+    public static IntakeAndAngleSubsystem getInstance() {
+        if (IAASubsystem == null) {
+            IAASubsystem = new IntakeAndAngleSubsystem();
+        }
+        return IAASubsystem;
+    }
 
     /**
      * returns the distance of the laser from the laser can
