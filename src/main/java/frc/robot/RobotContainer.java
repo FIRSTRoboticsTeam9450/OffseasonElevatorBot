@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
@@ -14,12 +16,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.AngleCommand;
 import frc.robot.commands.HoldingCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.SetPosition;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Elevator;
 
 public class RobotContainer {
   private double MaxSpeed = 2; // kSpeedAt12VoltsMps desired top speed
@@ -30,6 +34,7 @@ public class RobotContainer {
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final CommandXboxController m_driverController = new CommandXboxController(0); // My joystick
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+  private final Elevator elev = Elevator.getInstance();
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -59,8 +64,11 @@ public class RobotContainer {
     m_driverController.y().onTrue(new SetPosition(19));
     m_driverController.rightTrigger().whileTrue(new IntakeCommand(12));
     m_driverController.rightTrigger().onFalse(new IntakeCommand(0));
-    m_driverController.leftTrigger().whileTrue(new OuttakeCommand(-12));
-    m_driverController.leftTrigger().onFalse(new OuttakeCommand(0));
+    m_driverController.leftTrigger().onTrue(new AngleCommand(0.4).andThen(new OuttakeCommand(-12)));
+    m_driverController.leftTrigger().whileFalse(new OuttakeCommand(0).andThen(new AngleCommand(.725)));
+
+    m_driverController.b().onTrue(new AngleCommand(0.73));
+    m_driverController.x().onTrue(new AngleCommand(0.4));
 
     m_driverController.povDown().onTrue(new HoldingCommand(!holding));
 

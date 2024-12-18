@@ -18,7 +18,7 @@ public class AngleCommand extends Command{
      * @param pos the pos you want it to go to 
      */
     public AngleCommand(double pos) {
-        pos = MathUtil.clamp(pos, .482, .73);
+        pos = MathUtil.clamp(pos, .482, .725);
         this.pos = pos;
     }
 

@@ -135,6 +135,22 @@ public class Elevator extends SubsystemBase {
     public void setReset() {
         reseting = true;
         setVoltage(-1);
+        double allowedDifference = 0.025;
+        double pos1 = motor1.getPosition().getValueAsDouble();
+        double pos2 = pos1;
+        pos1 = motor1.getPosition().getValueAsDouble();
+        if (Math.max(pos1, pos2) - Math.min(pos1, pos2) < allowedDifference) {
+            reseting = false;
+            setVoltage(0);
+        }
+    }
+
+    /**
+     * will return the position of the elevator
+     * @return
+     */
+    public double getPosition() {
+        return motor1.getPosition().getValueAsDouble();
     }
 
 }
