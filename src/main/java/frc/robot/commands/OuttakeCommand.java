@@ -39,11 +39,11 @@ public class OuttakeCommand extends Command {
         if (IAASubsystem.getLaserDistance() > 381) {
             dropped = true;
         }
-        if (voltage == 0.0) {
-            IAASubsystem.setSetpoint(0.73);
-        } else if (voltage == -12.0) {
-            IAASubsystem.setSetpoint(0.485);
-        }
+        // if (voltage == 0.0) {
+        //     IAASubsystem.setSetpoint(0.73);
+        // } else if (voltage == -12.0) {
+        //     IAASubsystem.setSetpoint(0.485);
+        // }
         IAASubsystem.setIntakeVoltage(voltage);
     }
 

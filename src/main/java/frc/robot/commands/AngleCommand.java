@@ -2,6 +2,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeAndAngleSubsystem;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
 
 public class AngleCommand extends Command{
@@ -26,7 +29,7 @@ public class AngleCommand extends Command{
 
     @Override
     public boolean isFinished() {
-        return true;
+        return IAASubsystem.getPosition() < pos + 0.05 && IAASubsystem.getPosition() > pos - 0.05 ? true : false;
     }
 
 }
