@@ -26,8 +26,8 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
 
 public class RobotContainer {
-  private double MaxSpeed = 2; // kSpeedAt12VoltsMps desired top speed
-  private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+  private double MaxSpeed = 0.35; // kSpeedAt12VoltsMps desired top speed
+  private double MaxAngularRate = 0.3 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   public static boolean holding = true;
 

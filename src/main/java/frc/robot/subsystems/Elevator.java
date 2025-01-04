@@ -139,7 +139,7 @@ public class Elevator extends SubsystemBase {
         double pos1 = motor1.getPosition().getValueAsDouble();
         double pos2 = pos1;
         pos1 = motor1.getPosition().getValueAsDouble();
-        if (Math.max(pos1, pos2) - Math.min(pos1, pos2) < allowedDifference) {
+        if (Math.max(pos1, pos2) - Math.min(pos1, pos2) < allowedDifference && reseting == true) {
             reseting = false;
             setVoltage(0);
         }
